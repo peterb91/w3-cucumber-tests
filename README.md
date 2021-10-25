@@ -47,7 +47,7 @@ Or simply [download a zip](https://github.com/peterb91/w3-cucumber-tests/archive
   (All feature files with Serenity report  which includes both the living documentation from the feature files
   and also details of the REST requests and responses that were executed during the test)
   ```
-  mvn clean verify
+  mvn clean verify -Dwebdriver.driver=chrome/firefox
   ```
 
 - Run from ide:
@@ -55,12 +55,14 @@ Or simply [download a zip](https://github.com/peterb91/w3-cucumber-tests/archive
   (Run the `RunCucumberTest` class) - in this case, if scenario has `@skip` tag will be skipped).
     - If you use IntelliJ as your editor this should be preconfigured and should exist under the run configurations.
 
-You can generate full Serenity reports by running `mvn clean verify`.
+You can generate full Serenity reports by running `mvn clean verify -Dwebdriver.driver=chrome/firefox`.
 
 ## Configuration
 
 1. **W3ORG_BASE_URI** can be changed in `src/test/java/w3.org/config/TestConfig.class`
 1. **Constants** or **Session variables** can be modified or added in `src/test/java/w3.org/config/Constants.class`
+1. **Browser type/settings** and **Headless mode** can be changed in `src/test/resources/serenity.conf`
+
 
 
 ### The project directory structure

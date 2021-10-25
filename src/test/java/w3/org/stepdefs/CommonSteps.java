@@ -60,7 +60,7 @@ public class CommonSteps extends UIInteractionSteps {
         List<List<String>> linksAndStatuses = Serenity.sessionVariableCalled(GET_PAGE_LINKS_RESPONSE_LIST);
         for(List<String> linkStatus : linksAndStatuses) {
             SoftAssertions.assertSoftly(softAssert -> softAssert.assertThat(linkStatus.get(1))
-                    .as(String.format("Link: %s is not leading to valid page. Response status: %s",
+                    .as(String.format("Link: %s is not leading to live page. The page response code is: %s",
                             linkStatus.get(0), linkStatus.get(1)))
                     .matches("[1-3].."));
         }
