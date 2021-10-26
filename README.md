@@ -5,13 +5,13 @@ The project uses BDD approach and utilize features of Cucumber, Serenity and Res
 
 ## Prerequisites
 
-**A. Remote webdriver env**
+**A. Docker environment (remote webdriver)**
+
 1. Java 8+ (openjdk) You can find a suitable version of Java and install instructions [here](https://docs.oracle.com/en/java/javase/15/install/)
 1. Maven 3.6.3+ [here](https://maven.apache.org/install.html)
 1. Docker [here](https://docs.docker.com/get-docker/)
 
 **B. Local environment**
-
 
 1. First IntelliJ needs to be installed. (Preferably a recent version)
     1. You can find IntelliJ CE (2020.2.2) here:
@@ -50,16 +50,21 @@ Or simply [download a zip](https://github.com/peterb91/w3-cucumber-tests/archive
 
 1. Run in **docker-compose** (in the project root dir)
   - chrome:
-    1. `docker-compose -f docker-compose.yml up -d`
-    1. `mvn clean verify -Dwebdriver.remote.url=http://localhost:4444/wd/hub -Dwebdriver.driver=chrome`
+    ```
+    docker-compose -f docker-compose.yml up -d && mvn clean verify -Dwebdriver.remote.url=http://localhost:4444/wd/hub -Dwebdriver.driver=chrome
+    ```
   - firefox (@chromeOnly console error tests excluded):
-    1. `docker-compose -f docker-compose.yml up -d`
-    1. `mvn clean verify -Dwebdriver.remote.url=http://localhost:4444/wd/hub -Dcucumber.filter.tags="not @chromeOnly" -Dwebdriver.driver=firefox`
-  - cross browser (chrome and firefox) run with aggregate Serenity report:
-    1. `docker-compose -f docker-compose.yml up -d`
-    1. `mvn clean verify -Dwebdriver.remote.url=http://localhost:4444/wd/hub -Dwebdriver.driver=chrome && mvn verify -Dwebdriver.remote.url=http://localhost:4444/wd/hub -Dcucumber.filter.tags="not @chromeOnly" -Dwebdriver.driver=firefox`
+    ```
+    docker-compose -f docker-compose.yml up -d && mvn clean verify -Dwebdriver.remote.url=http://localhost:4444/wd/hub -Dcucumber.filter.tags="not @chromeOnly" -Dwebdriver.driver=firefox
+    ```
+  - cross browser (chrome and firefox) run with aggregate Serenity report (last mvn command without "clean" to combine results):
+    ```
+    docker-compose -f docker-compose.yml up -d
+    mvn clean verify -Dwebdriver.remote.url=http://localhost:4444/wd/hub -Dwebdriver.driver=chrome
+    mvn verify -Dwebdriver.remote.url=http://localhost:4444/wd/hub -Dcucumber.filter.tags="not @chromeOnly" -Dwebdriver.driver=firefox
+    ```
 
-Serenity report is generated after any above run in the following location: ```w3-cucumber-tests/target/site/serenity/index.html```
+Serenity report is generated after any above run in the following location: `w3-cucumber-tests/target/site/serenity/index.html`
 
 1. Run **locally** (in the project root dir)
   - Run from maven:
@@ -71,11 +76,11 @@ Serenity report is generated after any above run in the following location: ```w
     ```
   - Run from ide:
     
-    (Run the `RunCucumberTest` class in src/test/java/w3/org/runners/ dir) - in this case, if scenario has `@chromeOnly` tag will be skipped).
+    (Run the `RunCucumberTest` class in src/test/java/w3/org/runners/ dir).
     - If you use IntelliJ as your editor this should be preconfigured and should exist under the run configurations.
-    - To change browser please change `webdriver.driver` variable in `serenity.conf` file.
+    - To change browser please change **webdriver.driver** variable in _serenity.conf_ file.
 
-Serenity report is generated only after ```mvn clean verify...``` command run in the following location: ```w3-cucumber-tests/target/site/serenity/index.html```
+Serenity report is generated only after `mvn clean verify...` command run in the following location: `w3-cucumber-tests/target/site/serenity/index.html`
 
 ## Configuration
 
@@ -123,7 +128,6 @@ Best practices for writing feature files/scenarios
 - Use **@Then** only for assertions. Use it to describe the actual outcome, not an expected. DO NOT use "shall happen", but DO use "happened". A statement instead of an expectation.
 - Try to write reusable steps (make them parametrized)
 - Do not save the words, step definitions shall be descriptive and clear, but not technical sentences.
-- Do not use capital letters for the steps, since it will start anyways with Given, When or Then.
 - Add quote for exact button names e.g: `user clicks on "Login" button` -> the button text is exactly `Login`
 - When you have two values in connection use the same unit in the tests (e.g: do not set 1 minute timeout and execute 10000 millis algorithm, but: 2 minute timeout and 1 minute execution)
 - When testing result, you can be code specific: e.g: when a json response shall contain a "myMessage" filled with "xyz":, And I get the response with "xyz" message  -->, And I get the response with "myMessage" is "xyz".
