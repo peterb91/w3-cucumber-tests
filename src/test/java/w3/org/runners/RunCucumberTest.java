@@ -8,7 +8,8 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         plugin = {"pretty"},
         features = "classpath:features",
-        glue = {"w3.org.stepdefs"}
+        glue = {"w3.org.stepdefs"},
+        tags = "not @chromeOnly"
 )
 public class RunCucumberTest {
 }

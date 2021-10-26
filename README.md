@@ -5,7 +5,12 @@ The project uses BDD approach and utilize features of Cucumber, Serenity and Res
 
 ## Prerequisites
 
-**Install tools**
+**A. Remote webdriver env**
+1. Java 8+ (openjdk) You can find a suitable version of Java and install instructions [here](https://docs.oracle.com/en/java/javase/15/install/)
+1. Maven 3.6.3+ [here](https://maven.apache.org/install.html)
+1. Docker [here](https://docs.docker.com/get-docker/)
+
+**B. Local environment**
 
 
 1. First IntelliJ needs to be installed. (Preferably a recent version)
@@ -16,7 +21,7 @@ The project uses BDD approach and utilize features of Cucumber, Serenity and Res
 
     1. Java needs to be installed either through IntelliJ it will prompt for this during the setup or by you as the end-user.
         - You can find a suitable version of Java here: https://adoptopenjdk.net/, this needs to be extracted and then the path to this folder has to be added, otherwise, IntelliJ won't know where the java installation is.
-            - See how [here](https://java.com/en/download/help/path.html)
+        - Or you can download jdk directly from oracle and install as per instructions [here](https://docs.oracle.com/en/java/javase/15/install/)
 1. Then start IntelliJ and complete the initial setup of the editor, as of now there are no additional plugins required, choose whatever color scheme that suits you this can be changed later.
 
 1. We need to install the plugins Cucumber for Java and Gherkin.
@@ -27,6 +32,7 @@ The project uses BDD approach and utilize features of Cucumber, Serenity and Res
         1. In the plugin marketplace, search for Cucumber for Java and install the plugin
         1. Also in the plugin marketplace, search for Gherkin and install the plugin
         1. Restart IntelliJ
+1. Install maven as per instructions [here](https://maven.apache.org/install.html)
 
    > **NOTE:** If you have the JBehave plugin installed this needs to be disabled as this will interfere with the gherkin files.
 
@@ -42,20 +48,34 @@ Or simply [download a zip](https://github.com/peterb91/w3-cucumber-tests/archive
 
 ## Run tests and get Serenity report
 
-- Run from maven:
+1. Run in **docker-compose** (in the project root dir)
+  - chrome:
+    1. `docker-compose -f docker-compose.yml up -d`
+    1. `mvn clean verify -Dwebdriver.remote.url=http://localhost:4444/wd/hub -Dwebdriver.driver=chrome`
+  - firefox (@chromeOnly console error tests excluded):
+    1. `docker-compose -f docker-compose.yml up -d`
+    1. `mvn clean verify -Dwebdriver.remote.url=http://localhost:4444/wd/hub -Dcucumber.filter.tags="not @chromeOnly" -Dwebdriver.driver=firefox`
+  - cross browser (chrome and firefox) run with aggregate Serenity report:
+    1. `docker-compose -f docker-compose.yml up -d`
+    1. `mvn clean verify -Dwebdriver.remote.url=http://localhost:4444/wd/hub -Dwebdriver.driver=chrome && mvn verify -Dwebdriver.remote.url=http://localhost:4444/wd/hub -Dcucumber.filter.tags="not @chromeOnly" -Dwebdriver.driver=firefox`
 
-  (All feature files with Serenity report  which includes both the living documentation from the feature files
-  and also details of the REST requests and responses that were executed during the test)
-  ```
-  mvn clean verify -Dwebdriver.driver=chrome/firefox
-  ```
+Serenity report is generated after any above run in the following location: ```w3-cucumber-tests/target/site/serenity/index.html```
 
-- Run from ide:
-
-  (Run the `RunCucumberTest` class) - in this case, if scenario has `@skip` tag will be skipped).
+1. Run **locally** (in the project root dir)
+  - Run from maven:
+    
+    (All feature files with Serenity report  which includes both the living documentation from the feature files
+    and also details of the REST requests and responses that were executed during the test)
+    ```
+    mvn clean verify -Dwebdriver.driver=chrome/firefox
+    ```
+  - Run from ide:
+    
+    (Run the `RunCucumberTest` class in src/test/java/w3/org/runners/ dir) - in this case, if scenario has `@chromeOnly` tag will be skipped).
     - If you use IntelliJ as your editor this should be preconfigured and should exist under the run configurations.
+    - To change browser please change `webdriver.driver` variable in `serenity.conf` file.
 
-You can generate full Serenity reports by running `mvn clean verify -Dwebdriver.driver=chrome/firefox`.
+Serenity report is generated only after ```mvn clean verify...``` command run in the following location: ```w3-cucumber-tests/target/site/serenity/index.html```
 
 ## Configuration
 
