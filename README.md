@@ -49,22 +49,21 @@ Or simply [download a zip](https://github.com/peterb91/w3-cucumber-tests/archive
 ## Run tests and get Serenity report
 
 1. Run in **docker-compose** (in the project root dir)
-  - chrome:
+  - **chrome**:
     ```
-    docker-compose -f docker-compose.yml up -d && mvn clean verify -Dwebdriver.remote.url=http://localhost:4444/wd/hub -Dwebdriver.driver=chrome
+    docker-compose -f docker-compose.yml up -d && mvn clean verify -Dwebdriver.remote.url="http://localhost:4444/wd/hub" -Dwebdriver.driver=chrome
     ```
-  - firefox (@chromeOnly console error tests excluded):
+  - **firefox** (@chromeOnly console error tests excluded):
     ```
-    docker-compose -f docker-compose.yml up -d && mvn clean verify -Dwebdriver.remote.url=http://localhost:4444/wd/hub -Dcucumber.filter.tags="not @chromeOnly" -Dwebdriver.driver=firefox
-    ```
-  - cross browser (chrome and firefox) run with aggregate Serenity report (last mvn command without "clean" to combine results):
-    ```
-    docker-compose -f docker-compose.yml up -d
-    mvn clean verify -Dwebdriver.remote.url=http://localhost:4444/wd/hub -Dwebdriver.driver=chrome
-    mvn verify -Dwebdriver.remote.url=http://localhost:4444/wd/hub -Dcucumber.filter.tags="not @chromeOnly" -Dwebdriver.driver=firefox
+    docker-compose -f docker-compose.yml up -d && mvn clean verify -Dwebdriver.remote.url="http://localhost:4444/wd/hub" -Dcucumber.filter.tags="not @chromeOnly" -Dwebdriver.driver=firefox
     ```
 
-Serenity report is generated after any above run in the following location: `w3-cucumber-tests/target/site/serenity/index.html`
+Serenity report is generated after any above run in the following location (please note that mvn clean remove previously created report): 
+
+`w3-cucumber-tests/target/site/serenity/index.html`
+
+For failing scenarios in the results detail screenshot is attached together with error log
+Step details for API requests contains details about given call and response.
 
 1. Run **locally** (in the project root dir)
   - Run from maven:
